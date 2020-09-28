@@ -19,21 +19,22 @@ transform the exams into statistics of average test performance
 filter last exams since there are only 4 exams and more students.
 */
 
-// -------------------------------------------- Here are some callback functions and constants i use throughout the program ----
+// -------------------------------------------- CALLBACK FUNCTIONS AND CONSTANTS USED THROUGHOUT THE PROGRAM ----
+
 const EXAM_PERCENTAGE = 0.65;
-const EXERCISES_PERCENTAGE = 0.35
+const EXERCISES_PERCENTAGE = 0.35;
 const A_GRADE = 93;
 const B_GRADE = 85;
 const C_GRADE = 77;
 const D_GRADE = 69;
 const E_GRADE = 60;
 
-let sum = (array) => array.reduce((accumulator, nextValue) => accumulator + nextValue);
-let average = (array) => sum(array)/array.length;
-let minimum = (array) => array.reduce((current, nextValue) => current = current <= nextValue ? current : nextValue);
-let maximum = (array) => array.reduce((current, nextValue) => current = current >= nextValue ? current : nextValue);
+const sum = (array) => array.reduce((accumulator, nextValue) => accumulator + nextValue);
+const average = (array) => sum(array)/array.length;
+const minimum = (array) => array.reduce((current, nextValue) => current = current <= nextValue ? current : nextValue);
+const maximum = (array) => array.reduce((current, nextValue) => current = current >= nextValue ? current : nextValue);
 
-let lookupLetter = function (numberGrade) {
+const lookupLetter = function (numberGrade) {
   if (numberGrade >= A_GRADE) {
     return 'A';
   } else if (numberGrade >= B_GRADE) {
@@ -50,9 +51,10 @@ let lookupLetter = function (numberGrade) {
 };
 
 // ------------------------------------------------ MAIN FUNCTIONS --------------------------------
+
 function generateClassRecordSummary(scores) {
-  let studentGrades = []
-  let rawExams = []
+  let studentGrades = [];
+  let rawExams = [];
 
   Object.keys(scores).forEach(function(student) {
     let studentScore = scores[student]['scores'];
@@ -66,14 +68,15 @@ function generateClassRecordSummary(scores) {
 }
 
 function synthesizeGrade(individualScores) {
-  let exams = average(individualScores['exams']);
-  let exercises = sum(individualScores['exercises'])
-  let grade = exams * EXAM_PERCENTAGE + exercises * EXERCISES_PERCENTAGE;
-  return `${Math.round(grade)} (${lookupLetter(grade)})`
+  let examScore = average(individualScores['exams']);
+  let exerciseScore = sum(individualScores['exercises']);
+  let grade = examScore * EXAM_PERCENTAGE + exerciseScore * EXERCISES_PERCENTAGE;
+  return `${Math.round(grade)} (${lookupLetter(grade)})`;
 }
 
 function getStatistics(studentsExams, index) {
   let oneExam = [];
+
   studentsExams.forEach(student => oneExam.push(student[index]));
   return { average: average(oneExam), minimum: minimum(oneExam), maximum: maximum(oneExam) };
 }
@@ -120,3 +123,10 @@ let studentScores = {
 
 // ---------------------EXECUTION OF THE PROGRAM ------- LOGGED FOR CONVENIENCE ------
 console.log(generateClassRecordSummary(studentScores));
+
+// { studentGrades: [ '87 (B)', '73 (D)', '84 (C)', '86 (B)', '56 (F)' ],
+//   exams: 
+//    [ { average: 75.6, minimum: 50, maximum: 100 },
+//      { average: 86.4, minimum: 70, maximum: 100 },
+//      { average: 87.6, minimum: 60, maximum: 100 },
+//      { average: 91.8, minimum: 80, maximum: 100 } ] }
